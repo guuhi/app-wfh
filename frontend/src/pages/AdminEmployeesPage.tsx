@@ -31,7 +31,7 @@ export default function AdminEmployeesPage() {
         email: values.email,
         password: values.password,
         role: values.role,
-        position: values.position || undefined,
+        position: values.position,
         phone: values.phone || undefined,
       });
     } else if (editing) {

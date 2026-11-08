@@ -22,9 +22,9 @@ export interface NewEmployee {
   name: string;
   email: string;
   passwordHash: string;
-  position?: string;
+  position: string;
   phone?: string;
-  role?: Role;
+  role: Role;
 }
 
 export interface EmployeeChanges {

@@ -27,10 +27,10 @@ export interface Employee {
 export interface EmployeeInput {
   name: string;
   email: string;
-  password?: string;
-  position?: string;
+  password: string;
+  position: string;
   phone?: string;
-  role?: Role;
+  role: Role;
 }
 
 export interface EmployeeUpdate extends Partial<EmployeeInput> {

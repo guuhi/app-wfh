@@ -29,10 +29,8 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
-  const set = <K extends keyof EmployeeFormValues>(
-    key: K,
-    value: EmployeeFormValues[K],
-  ) => setValues((v) => ({ ...v, [key]: value }));
+  const set = <K extends keyof EmployeeFormValues>(key: K, value: EmployeeFormValues[K]) =>
+    setValues((v) => ({ ...v, [key]: value }));
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -52,20 +50,11 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }: Props) {
 
       <label>
         Name
-        <input
-          required
-          value={values.name}
-          onChange={(e) => set('name', e.target.value)}
-        />
+        <input required value={values.name} onChange={(e) => set('name', e.target.value)} />
       </label>
       <label>
         Email
-        <input
-          type="email"
-          required
-          value={values.email}
-          onChange={(e) => set('email', e.target.value)}
-        />
+        <input type="email" required value={values.email} onChange={(e) => set('email', e.target.value)} />
       </label>
       <label>
         {employee ? 'New password (leave blank to keep)' : 'Password'}
@@ -80,45 +69,27 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }: Props) {
       </label>
       <label>
         Position
-        <input
-          value={values.position}
-          onChange={(e) => set('position', e.target.value)}
-        />
+        <input required value={values.position} onChange={(e) => set('position', e.target.value)} />
       </label>
       <label>
-        Phone
-        <input
-          value={values.phone}
-          onChange={(e) => set('phone', e.target.value)}
-        />
+        Phone (optional)
+        <input value={values.phone} onChange={(e) => set('phone', e.target.value)} />
       </label>
       <label>
         Role
-        <select
-          value={values.role}
-          onChange={(e) => set('role', e.target.value as Role)}
-        >
+        <select value={values.role} onChange={(e) => set('role', e.target.value as Role)}>
           <option value="EMPLOYEE">Employee</option>
           <option value="ADMIN">HRD admin</option>
         </select>
       </label>
 
-      {error && (
-        <p className="error full" role="alert">
-          {error}
-        </p>
-      )}
+      {error && <p className="error full" role="alert">{error}</p>}
 
       <div className="row full">
         <button type="submit" className="btn" disabled={busy}>
           {busy ? 'Saving...' : 'Save employee'}
         </button>
-        <button
-          type="button"
-          className="btn btn-quiet"
-          onClick={onCancel}
-          disabled={busy}
-        >
+        <button type="button" className="btn btn-quiet" onClick={onCancel} disabled={busy}>
           Cancel
         </button>
       </div>
