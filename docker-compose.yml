@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5437:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./auth-service/.env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+    ports:
+      - "3001:3001"
+
+  attendance-service:
+    build:
+      context: ./attendance-service
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./attendance-service/.env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+    ports:
+      - "3002:3002"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_AUTH_API_URL: http://localhost:3001
+        VITE_ATTENDANCE_API_URL: http://localhost:3002
+    depends_on:
+      - auth-service
+      - attendance-service
+    ports:
+      - "5173:80"
+
+volumes:
+  pgdata:
